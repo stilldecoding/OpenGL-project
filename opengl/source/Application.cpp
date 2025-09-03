@@ -1,0 +1,177 @@
+
+#include<GL/glew.h>
+#include <GLFW/glfw3.h>
+#include<iostream>
+#include <fstream>
+#include <string>
+#include<sstream>
+#include<vector>
+#include<cmath>
+#include"Vertexbuffer.h"
+#include"IndexBuffer.h"
+#include"VertexArray.h"
+#include"VertexBufferLayout.h"
+#include"Shader.h"
+#include"Texture.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+
+#define M_PI 3.14159265358979323846
+
+std::vector<float> generateCircleVertices(float cx, float cy, float radius, int numSegments);
+
+int main(void)
+{
+    GLFWwindow* window;
+
+    /* Initialize the library */
+    if (!glfwInit())
+        return -1;
+
+    
+
+    /* Create a windowed mode window and its OpenGL context */
+    window = glfwCreateWindow(1600, 900, "OPENGL", NULL, NULL);
+    if (!window)
+    {
+        glfwTerminate();
+        return -1;
+    }
+
+/* Make the window's context current */
+glfwMakeContextCurrent(window);
+
+if (glewInit() != GLEW_OK)
+std::cout << "ERROR" << '\n';
+
+std::cout << glGetString(GL_VERSION) << std::endl;
+
+
+glEnable(GL_BLEND);
+glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
+glm::mat4 proj = glm::ortho(0.0f, 640.0f, 0.0f, 360.0f, -1.0f, 1.0f);
+glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+//glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(100.0f, 0, 0));
+
+glm::mat4 mvp = proj * view;
+
+
+float position[] = {
+    // position     // texcoord
+   200.0f, 200.0f,   0.0f, 0.0f,  // bottom-left
+    300.0f, 200.0f,   1.0f, 0.0f,  // bottom-right
+    300.0f,  300.0f,   1.0f, 1.0f,  // top-right
+   200.0f,  300.0f,   0.0f, 1.0f   // top-left
+};
+
+
+unsigned int index[] = {
+       0,1,2,
+       0,2,3
+};
+
+
+//vertex buffer creation and binding
+/*VertexBuffer vb(position, 4 * 4 * sizeof(float));
+
+//Index buffer object creation and binding
+IndexBuffer ib(index, 6 * sizeof(unsigned int));
+
+VertexBufferLayout layout;
+layout.Push<float>(2);
+layout.Push<float>(2);
+VertexArray vao;
+vao.Addbuffer(vb, layout);*/
+
+std::string path = "resource/shader/basic.shader";
+
+
+GLCALL(Shader shader(path));
+
+
+
+GLCALL(shader.SetUniform4f("u_Color", 0.9f, 0.0f, 0.0f, 1.0f));
+GLCALL(shader.SetUniformMat4f("m_MVP", mvp));
+
+
+//Texture texture("resource/Texture/texture.png");
+Renderer renderer;
+//texture.Bind(0);
+//GLCALL(shader.SetUniform1i("u_Texture", 0));
+
+
+VertexArray va1;
+
+std::vector<float> vertices = generateCircleVertices(320.0f, 160.0f, 20.0f, 50);
+
+VertexBuffer va_circle(vertices.data(), vertices.size() * sizeof(float));
+VertexBufferLayout circle_layout;
+circle_layout.Push<float>(2);
+va1.Addbuffer(va_circle,circle_layout);
+
+
+float speed = 1.5f;
+float curr_x = 160;
+/* Loop until the user closes the window */
+while (!glfwWindowShouldClose(window))
+{
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    /* Render here */
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    
+
+    glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(0, -speed, 0));
+    curr_x += speed;
+    mvp = mvp * translation;
+
+    shader.SetUniformMat4f("m_MVP", mvp);
+
+    
+    //GLCALL(renderer.Draw(vao, ib, shader));
+
+    GLCALL(renderer.DrawCircle(va1,shader,vertices.size() / 2));
+
+   
+
+
+    if (curr_x + 20 > 320 || curr_x - 20 < 0)
+    {
+        speed *= -1;
+        
+
+    }
+
+
+    /* Swap front and back buffers */
+    glfwSwapBuffers(window);
+
+    /* Poll for and process events */
+    glfwPollEvents();
+}
+
+    //glDeleteProgram(shader);
+
+glfwTerminate();
+return 0;
+}
+
+std::vector<float> generateCircleVertices(float cx, float cy, float radius, int numSegments) {
+    std::vector<float> vertices;
+
+    // Center vertex for triangle fan
+    vertices.push_back(cx);
+    vertices.push_back(cy);
+
+    for (int i = 0; i <= numSegments; ++i) {
+        float angle = 2.0f * M_PI * i / numSegments;
+        float x = cx + radius * cosf(angle);
+        float y = cy + radius * sinf(angle);
+        vertices.push_back(x);
+        vertices.push_back(y);
+    }
+
+    return vertices;
+}
