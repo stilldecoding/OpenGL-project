@@ -15,6 +15,9 @@
 #include"Texture.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include"Vendor/Imgui/imgui.h"
+#include"Vendor/Imgui/imgui_impl_glfw.h"
+#include"Vendor/Imgui/imgui_impl_opengl3.h"
 
 #define M_PI 3.14159265358979323846
 
@@ -74,7 +77,7 @@ unsigned int index[] = {
 
 
 //vertex buffer creation and binding
-/*VertexBuffer vb(position, 4 * 4 * sizeof(float));
+VertexBuffer vb(position, 4 * 4 * sizeof(float));
 
 //Index buffer object creation and binding
 IndexBuffer ib(index, 6 * sizeof(unsigned int));
@@ -83,7 +86,7 @@ VertexBufferLayout layout;
 layout.Push<float>(2);
 layout.Push<float>(2);
 VertexArray vao;
-vao.Addbuffer(vb, layout);*/
+vao.Addbuffer(vb, layout);
 
 std::string path = "resource/shader/basic.shader";
 
@@ -102,18 +105,44 @@ Renderer renderer;
 //GLCALL(shader.SetUniform1i("u_Texture", 0));
 
 
-VertexArray va1;
+/*VertexArray va1;
 
 std::vector<float> vertices = generateCircleVertices(320.0f, 160.0f, 20.0f, 50);
 
 VertexBuffer va_circle(vertices.data(), vertices.size() * sizeof(float));
 VertexBufferLayout circle_layout;
 circle_layout.Push<float>(2);
-va1.Addbuffer(va_circle,circle_layout);
+va1.Addbuffer(va_circle,circle_layout);*/
 
+shader.SetUniformMat4f("m_MVP", mvp);
 
 float speed = 1.5f;
-float curr_x = 160;
+float curr_x = 200;
+
+
+
+IMGUI_CHECKVERSION();
+ImGui::CreateContext();
+ImGui_ImplGlfw_InitForOpenGL(window, true);
+ImGui::StyleColorsDark();
+ImGui_ImplOpenGL3_Init((char*)glGetString(330));
+
+ImGuiIO& io = ImGui::GetIO(); (void)io;
+io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+
+
+// Setup Dear ImGui style
+ImGui::StyleColorsDark();
+//ImGui::StyleColorsLight();
+
+
+
+bool show_demo_window = true;
+bool show_another_window = false;
+ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+
 /* Loop until the user closes the window */
 while (!glfwWindowShouldClose(window))
 {
@@ -123,28 +152,41 @@ while (!glfwWindowShouldClose(window))
 
     
 
-    glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(0, -speed, 0));
-    curr_x += speed;
-    mvp = mvp * translation;
+   // glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(0, -speed, 0));
+    //curr_x += speed;
+    //mvp = mvp * translation;
 
-    shader.SetUniformMat4f("m_MVP", mvp);
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
 
     
-    //GLCALL(renderer.Draw(vao, ib, shader));
+    GLCALL(renderer.Draw(vao, ib, shader));
 
-    GLCALL(renderer.DrawCircle(va1,shader,vertices.size() / 2));
-
-   
-
-
-    if (curr_x + 20 > 320 || curr_x - 20 < 0)
+    
     {
-        speed *= -1;
-        
+        static float f = 0.0f;
+        static int counter = 0;
 
+        ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+        ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+        ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+        ImGui::Checkbox("Another Window", &show_another_window);
+
+        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+        ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+            counter++;
+        ImGui::SameLine();
+        ImGui::Text("counter = %d", counter);
+
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+        ImGui::End();
     }
-
-
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     /* Swap front and back buffers */
     glfwSwapBuffers(window);
 
@@ -153,7 +195,9 @@ while (!glfwWindowShouldClose(window))
 }
 
     //glDeleteProgram(shader);
-
+ImGui_ImplOpenGL3_Shutdown();
+ImGui_ImplGlfw_Shutdown();
+ImGui::DestroyContext();
 glfwTerminate();
 return 0;
 }
