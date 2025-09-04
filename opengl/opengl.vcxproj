@@ -76,7 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>source\Vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\glew-2.1.0\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>source;source\Vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\glew-2.1.0\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -96,7 +96,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>source\Vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\glew-2.1.0\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>source;source\Vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\glew-2.1.0\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,9 +144,10 @@
     <ClCompile Include="source\IndexBuffer.cpp" />
     <ClCompile Include="source\Renderer.cpp" />
     <ClCompile Include="source\Shader.cpp" />
+    <ClCompile Include="source\Test\TestClearColor.cpp" />
+    <ClCompile Include="source\Test\TestTrangle.cpp" />
     <ClCompile Include="source\Texture.cpp" />
     <ClCompile Include="source\Vendor\glm\detail\glm.cpp" />
-    <ClCompile Include="source\Vendor\glm\glm.cppm" />
     <ClCompile Include="source\Vendor\Imgui\imgui.cpp" />
     <ClCompile Include="source\Vendor\Imgui\imgui_demo.cpp" />
     <ClCompile Include="source\Vendor\Imgui\imgui_draw.cpp" />
@@ -303,6 +304,9 @@
     <ClInclude Include="source\IndexBuffer.h" />
     <ClInclude Include="source\Renderer.h" />
     <ClInclude Include="source\Shader.h" />
+    <ClInclude Include="source\Test\Test.h" />
+    <ClInclude Include="source\Test\TestClearColor.h" />
+    <ClInclude Include="source\Test\TestTrangle.h" />
     <ClInclude Include="source\Texture.h" />
     <ClInclude Include="source\Vendor\glm\common.hpp" />
     <ClInclude Include="source\Vendor\glm\detail\compute_common.hpp" />
