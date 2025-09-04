@@ -1,7 +1,8 @@
 #include "TestRectangle.h"
 #include<VertexBufferLayout.h>
+#include"Imgui/imgui.h"
 
-TestRectangle::TestRectangle(float width,float height,std::string path) : shader(path) 
+TestRectangle::TestRectangle(float width,float height,std::string path) : shader(path)
 {
 	float bottom_left_x = (TestRectangle::width / 2) - (width - 2);
 	float bottom_left_y = (TestRectangle::height / 2) - (height - 2);
@@ -39,7 +40,7 @@ TestRectangle::~TestRectangle()
 
 void TestRectangle::OnRender()
 {
-	translate = glm::translate(glm::mat4(1.0f), glm::vec3(1, 0, 0, 0));
+	translate = glm::translate(glm::mat4(1.0f), translation);
 	mvp = proj * translate;
 	shader.SetUniformMat4f("m_MVP", mvp);
 	renderer.Draw(va, ib, shader);
@@ -48,4 +49,9 @@ void TestRectangle::OnRender()
 void TestRectangle::SetColor(float r, float g, float b, float alpha)
 {
 	shader.SetUniform4f("u_Color", r, g, b, alpha);
+}
+
+void TestRectangle::OnImageGuiRender()
+{
+	ImGui::SliderFloat3("Translation", &translation.x,-100,100);
 }

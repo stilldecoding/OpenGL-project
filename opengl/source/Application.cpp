@@ -171,6 +171,9 @@ while (!glfwWindowShouldClose(window))
     rec.SetColor(1, 0, 0, 1);
     rec.OnRender();
 
+    rec.OnImageGuiRender();
+
+
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     
