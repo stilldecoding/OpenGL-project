@@ -1,10 +1,6 @@
 #include "TestTrangle.h"
 
-#include <VertexArray.h>
-#include<Vertexbuffer.h>
-#include<Shader.h>
-#include<Renderer.h>
-#include<VertexBufferLayout.h>
+#include"VertexBufferLayout.h"
 
 
 TestTriangle::TestTriangle(std::vector<float> vertices, std::string& path) : Color{ 1.0f,0.0f,0.0f,1.0f },shader(path),

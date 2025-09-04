@@ -20,6 +20,7 @@
 #include"Vendor/Imgui/imgui_impl_opengl3.h"
 #include "Test/TestClearColor.h"
 #include "Test/TestTrangle.h"
+#include "Test/TestRectangle.h"
 
 #define M_PI 3.14159265358979323846
 
@@ -146,7 +147,8 @@ ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 test::ClearColor clearColor;
 
-TestTriangle triangle({ 100,100,150,200,200,100 }, path);
+//TestTriangle triangle({ 100,100,150,200,200,100 }, path);
+TestRectangle rec(100.0f, 100.0f, path);
 
 /* Loop until the user closes the window */
 while (!glfwWindowShouldClose(window))
@@ -163,8 +165,11 @@ while (!glfwWindowShouldClose(window))
     //GLCALL(renderer.Draw(vao, ib, shader));
     
 
-    triangle.SetColor(1, 0, 0, 1);
-    triangle.OnRender();
+    //triangle.SetColor(1, 0, 0, 1);
+    //triangle.OnRender();
+
+    rec.SetColor(1, 0, 0, 1);
+    rec.OnRender();
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
