@@ -37,7 +37,7 @@ int main(void)
     
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(1600, 900, "OPENGL", NULL, NULL);
+    window = glfwCreateWindow(1280, 720, "OPENGL", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -110,7 +110,7 @@ Renderer renderer;
 
 /*VertexArray va1;
 
-std::vector<float> vertices = generateCircleVertices(320.0f, 160.0f, 20.0f, 50);
+std::vector<float> vertices = generateCircleVertices(320.0f, 160.0f, 50.0f, 50);
 
 VertexBuffer va_circle(vertices.data(), vertices.size() * sizeof(float));
 VertexBufferLayout circle_layout;

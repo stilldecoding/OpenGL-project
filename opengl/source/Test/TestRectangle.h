@@ -19,6 +19,8 @@ public:
 
 	void OnRender() override;
 	void SetColor(float r, float g, float b, float alpha);
+	void OnImageGuiRender() override;
+
 
 private:
 	VertexArray va;
@@ -32,4 +34,6 @@ private:
 	
 	glm::mat4 translate;
 	glm::mat4 mvp;
+
+	glm::vec3 translation;
 };
