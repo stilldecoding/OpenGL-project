@@ -18,6 +18,9 @@
 #include"Vendor/Imgui/imgui.h"
 #include"Vendor/Imgui/imgui_impl_glfw.h"
 #include"Vendor/Imgui/imgui_impl_opengl3.h"
+#include "Test/TestClearColor.h"
+#include "Test/TestTrangle.h"
+#include "Test/TestRectangle.h"
 
 #define M_PI 3.14159265358979323846
 
@@ -34,7 +37,7 @@ int main(void)
     
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(1600, 900, "OPENGL", NULL, NULL);
+    window = glfwCreateWindow(1280, 720, "OPENGL", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -107,7 +110,7 @@ Renderer renderer;
 
 /*VertexArray va1;
 
-std::vector<float> vertices = generateCircleVertices(320.0f, 160.0f, 20.0f, 50);
+std::vector<float> vertices = generateCircleVertices(320.0f, 160.0f, 50.0f, 50);
 
 VertexBuffer va_circle(vertices.data(), vertices.size() * sizeof(float));
 VertexBufferLayout circle_layout;
@@ -142,55 +145,43 @@ bool show_demo_window = true;
 bool show_another_window = false;
 ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+test::ClearColor clearColor;
+
+TestTriangle triangle({ 100,100,150,200,200,100 }, path);
+TestRectangle rec(100.0f, 100.0f, path);
 
 /* Loop until the user closes the window */
 while (!glfwWindowShouldClose(window))
 {
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    /* Render here */
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    
-
-   // glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(0, -speed, 0));
-    //curr_x += speed;
-    //mvp = mvp * translation;
+    clearColor.OnRender();
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
     
-    GLCALL(renderer.Draw(vao, ib, shader));
 
+    //clearColor.OnImageGuiRender();
+    //GLCALL(renderer.Draw(vao, ib, shader));
     
     {
-        static float f = 0.0f;
-        static int counter = 0;
-
-        ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-        ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-        ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-        ImGui::Checkbox("Another Window", &show_another_window);
-
-        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-        ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-            counter++;
-        ImGui::SameLine();
-        ImGui::Text("counter = %d", counter);
-
-        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-        ImGui::End();
+        triangle.SetColor(1, 0, 0, 1);
+        triangle.OnRender();
     }
+
+    {
+        rec.SetColor(1, 0, 0, 1);
+        rec.OnImageGuiRender();
+        rec.OnRender();
+
+    }
+
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    /* Swap front and back buffers */
+    
     glfwSwapBuffers(window);
 
-    /* Poll for and process events */
+    
     glfwPollEvents();
 }
 

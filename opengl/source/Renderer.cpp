@@ -25,6 +25,13 @@ void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& 
     glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, 0);
 }
 
+void Renderer::Draw(const VertexArray& va, const Shader& shader)
+{
+    va.Bind();
+    shader.UseProgram();
+    glDrawArrays(GL_TRIANGLES,0,3);
+}
+
 void Renderer::DrawCircle(const VertexArray& va, const Shader& shader, int count)
 {
     va.Bind();

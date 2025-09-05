@@ -7,8 +7,11 @@ private:
 	unsigned int gl_Renderer_ID;
 public:
 	VertexBuffer(const void* data,unsigned int size);
+	VertexBuffer() {}
 	~VertexBuffer();
 	
+	void Init(const void* data, unsigned int size);
+
 	void Bind() const;
 	void Unbind() const;
 
