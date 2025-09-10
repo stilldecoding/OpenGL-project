@@ -1,18 +1,24 @@
 #include "TestTrangle.h"
-
+#include"Imgui/imgui.h"
 #include"VertexBufferLayout.h"
 
 
-TestTriangle::TestTriangle(std::vector<float> vertices, std::string& path) : Color{ 1.0f,0.0f,0.0f,1.0f },shader(path),
-	vb(vertices.data(),vertices.size() * sizeof(float))
+TestTriangle::TestTriangle(std::string& path) : Color{ 1.0f,0.0f,0.0f,1.0f },shader(path)
 {
+
+	std::vector<float> vertices{
+		200,200, 1.0f,0.0f,0.0f,
+		1000,200, 0.0f, 1.0f,0.0f,
+		600,600 , 0.0f,0.0f,1.0f
+	};
 	this->vertices = vertices;
 	this->path = path;
 
 
-	
+	vb.Init(&vertices[0], 5 * 3 * sizeof(float));
 	VertexBufferLayout layout;
 	layout.Push<float>(2);
+	layout.Push<float>(3);
 	va.Addbuffer(vb, layout);
 
 }
@@ -21,15 +27,19 @@ TestTriangle::~TestTriangle()
 {
 }
 
-void TestTriangle::OnRender()
+void TestTriangle::OnRender(float DeltaTime)
 {
-	shader.SetUniformMat4f("m_MVP", proj);
+	translate = glm::translate(glm::mat4(1.0f), translationA);
+	mvp = proj * translate;
+	shader.SetUniformMat4f("m_MVP", mvp);
+	shader.SetUniform1f("time", DeltaTime);
 	renderer.Draw(va,shader);
 
 }
 
 void TestTriangle::OnImageGuiRender()
 {
+	ImGui::SliderFloat3("Translation A", &translationA.x, -200, 200);
 }
 
 

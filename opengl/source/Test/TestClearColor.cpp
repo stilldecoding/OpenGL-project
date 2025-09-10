@@ -11,7 +11,7 @@ test::ClearColor::~ClearColor()
 {
 }
 
-void test::ClearColor::OnRender()
+void test::ClearColor::OnRender(float DeltaTime)
 {
 
     glClearColor(clear_color[0],clear_color[1],clear_color[2],clear_color[3]);

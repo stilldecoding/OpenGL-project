@@ -10,10 +10,10 @@
 class TestTriangle:public test::Test
 {
 public:
-	TestTriangle(std::vector<float> vertices,std::string& path);
+	TestTriangle(std::string& path);
 	~TestTriangle();
 
-	void OnRender() override;
+	void OnRender(float DeltaTime) override;
 	void OnImageGuiRender() override;
 
 	void SetColor(float r, float g, float b, float alpha);
@@ -27,4 +27,10 @@ private:
 	VertexArray va;
 	VertexBuffer vb;
 	Shader shader;
+
+
+	glm::mat4 translate;
+	glm::mat4 mvp;
+
+	glm::vec3 translationA;
 };

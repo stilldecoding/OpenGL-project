@@ -28,6 +28,8 @@ std::vector<float> generateCircleVertices(float cx, float cy, float radius, int 
 
 int main(void)
 {
+    
+
     GLFWwindow* window;
 
     /* Initialize the library */
@@ -37,7 +39,7 @@ int main(void)
     
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(1280, 720, "OPENGL", NULL, NULL);
+    window = glfwCreateWindow(1600, 900, "OPENGL", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -57,39 +59,16 @@ glEnable(GL_BLEND);
 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
-glm::mat4 proj = glm::ortho(0.0f, 640.0f, 0.0f, 360.0f, -1.0f, 1.0f);
+glm::mat4 proj = glm::ortho(0.0f, 1690.0f, 0.0f, 900.0f, -1.0f, 1.0f);
 glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
 //glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(100.0f, 0, 0));
 
 glm::mat4 mvp = proj * view;
 
 
-float position[] = {
-    // position     // texcoord
-   200.0f, 200.0f,   0.0f, 0.0f,  // bottom-left
-    300.0f, 200.0f,   1.0f, 0.0f,  // bottom-right
-    300.0f,  300.0f,   1.0f, 1.0f,  // top-right
-   200.0f,  300.0f,   0.0f, 1.0f   // top-left
-};
 
 
-unsigned int index[] = {
-       0,1,2,
-       0,2,3
-};
 
-
-//vertex buffer creation and binding
-VertexBuffer vb(position, 4 * 4 * sizeof(float));
-
-//Index buffer object creation and binding
-IndexBuffer ib(index, 6 * sizeof(unsigned int));
-
-VertexBufferLayout layout;
-layout.Push<float>(2);
-layout.Push<float>(2);
-VertexArray vao;
-vao.Addbuffer(vb, layout);
 
 std::string path = "resource/shader/basic.shader";
 
@@ -98,8 +77,6 @@ GLCALL(Shader shader(path));
 
 
 
-GLCALL(shader.SetUniform4f("u_Color", 0.9f, 0.0f, 0.0f, 1.0f));
-GLCALL(shader.SetUniformMat4f("m_MVP", mvp));
 
 
 //Texture texture("resource/Texture/texture.png");
@@ -108,14 +85,6 @@ Renderer renderer;
 //GLCALL(shader.SetUniform1i("u_Texture", 0));
 
 
-/*VertexArray va1;
-
-std::vector<float> vertices = generateCircleVertices(320.0f, 160.0f, 50.0f, 50);
-
-VertexBuffer va_circle(vertices.data(), vertices.size() * sizeof(float));
-VertexBufferLayout circle_layout;
-circle_layout.Push<float>(2);
-va1.Addbuffer(va_circle,circle_layout);*/
 
 shader.SetUniformMat4f("m_MVP", mvp);
 
@@ -137,9 +106,6 @@ io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
 // Setup Dear ImGui style
 ImGui::StyleColorsDark();
-//ImGui::StyleColorsLight();
-
-
 
 bool show_demo_window = true;
 bool show_another_window = false;
@@ -147,13 +113,13 @@ ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 test::ClearColor clearColor;
 
-TestTriangle triangle({ 100,100,150,200,200,100 }, path);
-TestRectangle rec(100.0f, 100.0f, path);
-
+TestTriangle triangle( path);
+TestRectangle rec(path);
+rec.SetColor(1, 0, 0, 1);
 /* Loop until the user closes the window */
 while (!glfwWindowShouldClose(window))
 {
-    clearColor.OnRender();
+    clearColor.OnRender(0);
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
@@ -161,20 +127,13 @@ while (!glfwWindowShouldClose(window))
 
     
 
-    //clearColor.OnImageGuiRender();
-    //GLCALL(renderer.Draw(vao, ib, shader));
+    clearColor.OnImageGuiRender();
     
-    {
-        triangle.SetColor(1, 0, 0, 1);
-        triangle.OnRender();
-    }
+    
 
-    {
-        rec.SetColor(1, 0, 0, 1);
-        rec.OnImageGuiRender();
-        rec.OnRender();
-
-    }
+    //triangle.OnRender(0);
+    //triangle.OnImageGuiRender();
+    rec.OnRender(0);
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

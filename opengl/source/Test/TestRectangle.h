@@ -14,10 +14,10 @@
 class TestRectangle : public test::Test
 {
 public:
-	TestRectangle(float width,float height, std::string path);
+	TestRectangle(std::string path);
 	~TestRectangle();
 
-	void OnRender() override;
+	void OnRender(float DeltaTime) override;
 	void SetColor(float r, float g, float b, float alpha);
 	void OnImageGuiRender() override;
 
@@ -35,5 +35,5 @@ private:
 	glm::mat4 translate;
 	glm::mat4 mvp;
 
-	glm::vec3 translation;
+	glm::vec3 translationA;
 };

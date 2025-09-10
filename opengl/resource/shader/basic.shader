@@ -1,17 +1,19 @@
 #shader vertex
 #version 460 core
 
-layout(location = 0) in vec4 position;
-layout(location = 1) in vec2 text_coord;
+layout(location = 0) in vec3 position;
+layout(location = 1) in vec3 i_color;
 
-out vec2 v_Texture_Coord;
+out vec3 o_color;
 
 uniform mat4 m_MVP;
+float time;
 
 void main()
 {
-	v_Texture_Coord =  text_coord;
-	gl_Position =  m_MVP * position ;
+	
+	o_color = i_color;
+	gl_Position =  m_MVP * vec4(position,1.0f) ;
 }
 
 #shader fragment
@@ -19,13 +21,11 @@ void main()
 
 layout(location = 0) out vec4 color;
 
-in vec2 v_Texture_Coord;
+in vec3 o_color;
 
 uniform vec4 u_Color;
-uniform sampler2D u_Texture;
 
 void main()
 {
-	//vec4 texColor = texture(u_Texture,v_Texture_Coord);
-	color = u_Color;
+	color = vec4(o_color,1.0f);
 }
