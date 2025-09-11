@@ -3,7 +3,7 @@
 #include"VertexBufferLayout.h"
 
 
-TestTriangle::TestTriangle(std::string& path) : Color{ 1.0f,0.0f,0.0f,1.0f },shader(path)
+TestTriangle::TestTriangle(std::string& path) : Color{ 1.0f,0.0f,0.0f,1.0f },shader(path),scaleVec(1.0f)
 {
 
 	std::vector<float> vertices{
@@ -29,8 +29,13 @@ TestTriangle::~TestTriangle()
 
 void TestTriangle::OnRender(float DeltaTime)
 {
+	//model matrix
 	translate = glm::translate(glm::mat4(1.0f), translationA);
-	mvp = proj * translate;
+	scale = glm::scale(glm::mat4(1.0f), scaleVec);
+	model = translate * scale;
+
+	//MVP matrix
+	mvp = proj * model;
 	shader.SetUniformMat4f("m_MVP", mvp);
 	shader.SetUniform1f("time", DeltaTime);
 	renderer.Draw(va,shader);
@@ -40,6 +45,7 @@ void TestTriangle::OnRender(float DeltaTime)
 void TestTriangle::OnImageGuiRender()
 {
 	ImGui::SliderFloat3("Translation A", &translationA.x, -200, 200);
+	ImGui::SliderFloat2("scale", &scaleVec.x, 0, 6);
 }
 
 

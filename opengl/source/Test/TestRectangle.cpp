@@ -2,24 +2,45 @@
 #include<VertexBufferLayout.h>
 #include"Imgui/imgui.h"
 
-TestRectangle::TestRectangle(std::string path) : shader(path),translationA(150,150,0)
+TestRectangle::TestRectangle(std::string path) : shader(path),translationA(150,150,0),curve(0.005),amplitute(20),scale(1.0f),scaleVec(1.0f)
 {
-	float vertices[] = {
-		//position     //color
-		1020.0f,180.0f, 1.0f,  0,    0,
-		1020.0f,700.0f, 0,	  1.0f, 0,
-		220.0f,180.0f, 0,     0,    1.0f,
-		220.0f,700.0f, 0,     0,    1.0f
-	};
+	int rows = 60, cols = 45;
+	std::vector<float> vertices;
+	std::vector<unsigned int> indices;
 
-	unsigned int index[] = { 0,1,2,0,3,2 };
+	int width = 800;
+	int height = 500;
 
-	vb.Init(&vertices[0], 4 * 5 * sizeof(float));
+	float startX = 100.0f;
+	float startY = 50.0f;
+
+	for (int y = 0; y <= rows; y++) {
+		for (int x = 0; x <= cols; x++) {
+			float xpos = startX + (float)x / cols * width;
+			float ypos = startY + (float)y / rows * height;
+			vertices.push_back(xpos);
+			vertices.push_back(ypos);
+		}
+	}
+
+	for (int y = 0; y < rows; y++) {
+		for (int x = 0; x < cols; x++) {
+			int i = y * (cols + 1) + x;
+			indices.push_back(i);
+			indices.push_back(i + cols + 1);
+			indices.push_back(i + 1);
+
+			indices.push_back(i + 1);
+			indices.push_back(i + cols + 1);
+			indices.push_back(i + cols + 2);
+		}
+	}
+
+	vb.Init(&vertices[0], vertices.size() * sizeof(float));
 	VertexBufferLayout layout;
 	layout.Push<float>(2);
-	layout.Push<float>(3);
 	va.Addbuffer(vb, layout);
-	ib.Init(index, sizeof(float) * 6);
+	ib.Init(indices.data(), sizeof(unsigned int) * indices.size());
 
 }
 
@@ -30,8 +51,13 @@ TestRectangle::~TestRectangle()
 void TestRectangle::OnRender(float DeltaTime)
 {
 	translate = glm::translate(glm::mat4(1.0f), translationA);
-	mvp = proj * translate;
+	scale = glm::scale(glm::mat4(1.0f), scaleVec);
+	model = scale * translate;
+	mvp = proj * model;
+	shader.SetUniform1f("time", DeltaTime);
 	shader.SetUniformMat4f("m_MVP", mvp);
+	shader.SetUniform1f("amplitute", amplitute);
+	shader.SetUniform1f("curve", curve);
 	renderer.Draw(va, ib, shader);
 }
 
@@ -43,4 +69,7 @@ void TestRectangle::SetColor(float r, float g, float b, float alpha)
 void TestRectangle::OnImageGuiRender()
 {
 	ImGui::SliderFloat3("Translation A", &translationA.x, -1000, 1000);
+	ImGui::SliderFloat("amplitute", &amplitute,10,100);
+	ImGui::SliderFloat("curve", &curve,0.1,0.001);
+	ImGui::SliderFloat2("Scale", &scaleVec.x,1,5);
 }

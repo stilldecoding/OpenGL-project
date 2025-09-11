@@ -7,10 +7,6 @@
 #include<sstream>
 #include<vector>
 #include<cmath>
-#include"Vertexbuffer.h"
-#include"IndexBuffer.h"
-#include"VertexArray.h"
-#include"VertexBufferLayout.h"
 #include"Shader.h"
 #include"Texture.h"
 #include "glm/glm.hpp"
@@ -21,10 +17,10 @@
 #include "Test/TestClearColor.h"
 #include "Test/TestTrangle.h"
 #include "Test/TestRectangle.h"
+#include "Test/TestCircle.h"
 
-#define M_PI 3.14159265358979323846
 
-std::vector<float> generateCircleVertices(float cx, float cy, float radius, int numSegments);
+
 
 int main(void)
 {
@@ -60,36 +56,10 @@ glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
 glm::mat4 proj = glm::ortho(0.0f, 1690.0f, 0.0f, 900.0f, -1.0f, 1.0f);
-glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
-//glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(100.0f, 0, 0));
-
-glm::mat4 mvp = proj * view;
-
-
-
-
 
 
 std::string path = "resource/shader/basic.shader";
-
-
-GLCALL(Shader shader(path));
-
-
-
-
-
-//Texture texture("resource/Texture/texture.png");
-Renderer renderer;
-//texture.Bind(0);
-//GLCALL(shader.SetUniform1i("u_Texture", 0));
-
-
-
-shader.SetUniformMat4f("m_MVP", mvp);
-
-float speed = 1.5f;
-float curr_x = 200;
+std::string path_circle = "resource/shader/circle.shader";
 
 
 
@@ -113,9 +83,22 @@ ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 test::ClearColor clearColor;
 
-TestTriangle triangle( path);
-TestRectangle rec(path);
-rec.SetColor(1, 0, 0, 1);
+//TestTriangle triangle( path);
+//TestRectangle rec(path);
+//rec.SetColor(1, 0, 0, 1);
+
+
+
+TestCircle earth(800, 450, 100, path_circle);
+earth.SetColor(1, 1, 0, 1);
+
+TestCircle sun(800.0f, 450.0f, 40.0f, path);
+
+
+sun.SetColor(0, 0.5, 0.1, 1);
+float r = 27.0f;
+
+
 /* Loop until the user closes the window */
 while (!glfwWindowShouldClose(window))
 {
@@ -125,15 +108,25 @@ while (!glfwWindowShouldClose(window))
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    
-
     clearColor.OnImageGuiRender();
     
+    float time = glfwGetTime();
+
     
 
-    //triangle.OnRender(0);
-    //triangle.OnImageGuiRender();
-    rec.OnRender(0);
+    float angle = time;
+    float x = r * cos(angle);
+    float y = r * sin(angle);
+
+    glm::mat4 t = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, 1));
+
+    earth.SetTranslate(glm::vec3(x,y,1.0f));
+    earth.OnRender(time);
+
+
+    sun.OnRender(time);
+
+    ImGui::SliderFloat("radius", &r, 7, 1000);
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -150,22 +143,4 @@ ImGui_ImplGlfw_Shutdown();
 ImGui::DestroyContext();
 glfwTerminate();
 return 0;
-}
-
-std::vector<float> generateCircleVertices(float cx, float cy, float radius, int numSegments) {
-    std::vector<float> vertices;
-
-    // Center vertex for triangle fan
-    vertices.push_back(cx);
-    vertices.push_back(cy);
-
-    for (int i = 0; i <= numSegments; ++i) {
-        float angle = 2.0f * M_PI * i / numSegments;
-        float x = cx + radius * cosf(angle);
-        float y = cy + radius * sinf(angle);
-        vertices.push_back(x);
-        vertices.push_back(y);
-    }
-
-    return vertices;
 }

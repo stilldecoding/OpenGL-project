@@ -146,6 +146,7 @@
     <ClCompile Include="source\IndexBuffer.cpp" />
     <ClCompile Include="source\Renderer.cpp" />
     <ClCompile Include="source\Shader.cpp" />
+    <ClCompile Include="source\Test\TestCircle.cpp" />
     <ClCompile Include="source\Test\TestClearColor.cpp" />
     <ClCompile Include="source\Test\TestRectangle.cpp" />
     <ClCompile Include="source\Test\TestTrangle.cpp" />
@@ -164,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="resource\shader\basic.shader" />
+    <None Include="resource\shader\circle.shader" />
     <None Include="source\Vendor\glm\detail\func_common.inl" />
     <None Include="source\Vendor\glm\detail\func_common_simd.inl" />
     <None Include="source\Vendor\glm\detail\func_exponential.inl" />
@@ -308,6 +310,7 @@
     <ClInclude Include="source\Renderer.h" />
     <ClInclude Include="source\Shader.h" />
     <ClInclude Include="source\Test\Test.h" />
+    <ClInclude Include="source\Test\TestCircle.h" />
     <ClInclude Include="source\Test\TestClearColor.h" />
     <ClInclude Include="source\Test\TestRectangle.h" />
     <ClInclude Include="source\Test\TestTrangle.h" />
