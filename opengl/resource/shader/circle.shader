@@ -5,18 +5,13 @@ layout(location = 0) in vec3 position;
 
 
 uniform mat4 m_MVP;
-uniform float time;
 
-uniform float amplitute;
-uniform float curve;
+
 
 void main()
 {
-	vec3 pos = position;
 
-	
-
-	gl_Position =  m_MVP * vec4(pos,1.0f) ;
+	gl_Position =  m_MVP * vec4(position,1.0f) ;
 }
 
 #shader fragment

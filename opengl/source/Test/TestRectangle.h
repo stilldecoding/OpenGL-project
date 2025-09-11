@@ -33,7 +33,16 @@ private:
 
 	
 	glm::mat4 translate;
+	glm::mat4 scale;
+	glm::mat4 rotation;
+	glm::mat4 model;
 	glm::mat4 mvp;
 
 	glm::vec3 translationA;
+	glm::vec3 scaleVec;
+	
+	float curve;
+	float amplitute;
+	
+
 };

@@ -72,6 +72,9 @@
     <ClCompile Include="source\Vendor\Imgui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\Test\TestCircle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="resource\shader\basic.shader" />
@@ -489,6 +492,7 @@
     <None Include="source\Vendor\glm\gtx\wrap.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="resource\shader\circle.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Vertexbuffer.h">
@@ -1416,6 +1420,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="source\Vendor\Imgui\imstb_truetype.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Test\TestCircle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
