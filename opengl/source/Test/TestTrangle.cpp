@@ -42,9 +42,9 @@ void TestTriangle::OnRender(float DeltaTime)
 
 }
 
-void TestTriangle::OnImageGuiRender()
+void TestTriangle::OnImageGuiRender(std::string string)
 {
-	ImGui::SliderFloat3("Translation A", &translationA.x, -200, 200);
+	ImGui::SliderFloat3(string.c_str(), &translationA.x, -200, 200);
 	ImGui::SliderFloat2("scale", &scaleVec.x, 0, 6);
 }
 

@@ -87,16 +87,15 @@ test::ClearColor clearColor;
 //TestRectangle rec(path);
 //rec.SetColor(1, 0, 0, 1);
 
-
+TestCircle sun(800.0f, 450.0f, 40.0f, path);
+sun.SetColor(0, 0.5, 0.1, 1);
 
 TestCircle earth(800, 450, 100, path_circle);
 earth.SetColor(1, 1, 0, 1);
 
-TestCircle sun(800.0f, 450.0f, 40.0f, path);
 
 
-sun.SetColor(0, 0.5, 0.1, 1);
-float r = 27.0f;
+float r = 80.0f;
 
 
 /* Loop until the user closes the window */
@@ -108,11 +107,11 @@ while (!glfwWindowShouldClose(window))
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    clearColor.OnImageGuiRender();
+    clearColor.OnImageGuiRender("");
     
     float time = glfwGetTime();
 
-    
+    sun.OnRender(time);
 
     float angle = time;
     float x = r * cos(angle);
@@ -120,11 +119,12 @@ while (!glfwWindowShouldClose(window))
 
     glm::mat4 t = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, 1));
 
-    earth.SetTranslate(glm::vec3(x,y,1.0f));
+    //earth.SetTranslate(glm::vec3(x,y,1.0f));
     earth.OnRender(time);
+    earth.OnImageGuiRender("earth Translate");
+    sun.OnImageGuiRender("Sun Translate");
 
-
-    sun.OnRender(time);
+    
 
     ImGui::SliderFloat("radius", &r, 7, 1000);
 

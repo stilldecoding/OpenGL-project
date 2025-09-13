@@ -66,9 +66,9 @@ void TestRectangle::SetColor(float r, float g, float b, float alpha)
 	shader.SetUniform4f("u_Color", r, g, b, alpha);
 }
 
-void TestRectangle::OnImageGuiRender()
+void TestRectangle::OnImageGuiRender(std::string string)
 {
-	ImGui::SliderFloat3("Translation A", &translationA.x, -1000, 1000);
+	ImGui::SliderFloat3(string.c_str(), &translationA.x, -1000, 1000);
 	ImGui::SliderFloat("amplitute", &amplitute,10,100);
 	ImGui::SliderFloat("curve", &curve,0.1,0.001);
 	ImGui::SliderFloat2("Scale", &scaleVec.x,1,5);

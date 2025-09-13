@@ -17,7 +17,7 @@ public:
 	~TestCircle();
 
 	void OnRender(float delta) override;
-	void OnImageGuiRender() override;
+	void OnImageGuiRender(std::string string) override;
 	void SetColor(float r,float g,float b,float alpha);
 	void SetTranslate(glm::vec3 translation);
 

@@ -22,7 +22,7 @@ void test::ClearColor::OnUpdate()
 {
 }
 
-void test::ClearColor::OnImageGuiRender()
+void test::ClearColor::OnImageGuiRender(std::string string)
 {
 	ImGui::ColorEdit4("Clear Color", clear_color);
 }

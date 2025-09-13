@@ -43,9 +43,9 @@ void TestCircle::OnRender(float delta)
     render.DrawCircle(va, shader,vertices.size()/2);
 }
 
-void TestCircle::OnImageGuiRender()
+void TestCircle::OnImageGuiRender(std::string string)
 {
-    ImGui::SliderFloat3("Translation", &translation.x, -1000, 1000);
+    ImGui::SliderFloat3(string.c_str(), &translation.x, -1000, 1000);
 }
 
 void TestCircle::SetColor(float r, float g, float b,float alpha) {

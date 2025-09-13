@@ -1,7 +1,6 @@
 #pragma once
 #include "Test.h"
 #include<vector>
-#include<string>
 #include <VertexArray.h>
 #include<Vertexbuffer.h>
 #include<Shader.h>
@@ -19,7 +18,7 @@ public:
 
 	void OnRender(float DeltaTime) override;
 	void SetColor(float r, float g, float b, float alpha);
-	void OnImageGuiRender() override;
+	void OnImageGuiRender(std::string string) override;
 
 
 private:

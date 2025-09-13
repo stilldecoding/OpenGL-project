@@ -12,7 +12,7 @@ namespace test {
 		void OnRender(float DeltaTime) override;
 		void OnUpdate() override;
 
-		void OnImageGuiRender() override;
+		void OnImageGuiRender(std::string string) override;
 
 	private:
 		float clear_color[4];
